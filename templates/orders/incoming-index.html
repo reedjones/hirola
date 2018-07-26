@@ -1,0 +1,22 @@
+{% extends 'site_base.html' %}
+
+
+
+
+{% block body-class %} sidenav-toggled {% endblock %}
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="#">Orders</a>
+    </li>
+    <li class="breadcrumb-item active">
+        <a href="#">Incoming</a>
+    </li>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>You have {{ orders.count }} incoming orders</h4>
+        </div>
+    </div>
+
+{% endblock %}

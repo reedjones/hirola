@@ -1,0 +1,68 @@
+<ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+        <a class="nav-link" href="/dashboard/">
+            <i class="fas fa-cubes"></i>
+            <span class="nav-link-text"> Dashboard</span>
+        </a>
+    </li>
+
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Your Stuff">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents"
+           data-parent="#exampleAccordion">
+            <i class="fas fa-list"></i>
+            <span class="nav-link-text"> Your Stuff</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapseComponents">
+            <li>
+                <a href="{% url 'my-services' %}">Your Offers</a>
+            </li>
+            <li>
+                <a href="{% url 'incoming-order-index' %}">Incoming Orders</a>
+            </li>
+            <li>
+                <a href="/services/requests/outgoing/">Your Requests</a>
+            </li>
+            <li>
+                <a href="/services/requests/incoming/">Incoming Offers</a>
+            </li>
+            <li>
+                <a href="{% url 'my-bookmarked' %}">Saved Offers</a>
+            </li>
+
+        </ul>
+    </li>
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Your Profile">
+        <a class="nav-link" href="/services/create/">
+            <i class="fas fa-user-astronaut"></i>
+            <span class="nav-link-text"> Your Profile</span>
+        </a>
+    </li>
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Your Collectives">
+        <a class="nav-link" href="/services/create/">
+            <i class="fas fa-users"></i>
+            <span class="nav-link-text"> Your Collectives</span>
+        </a>
+    </li>
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Create Canvas | Community">
+        <a class="nav-link" href="/canvas/create/">
+            <i class="fas fa-plus-circle"></i>
+            <span class="nav-link-text"> Create Canvas | Community</span>
+        </a>
+    </li>
+
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Create Offer | Network">
+        <a class="nav-link" href="/services/create/">
+            <i class="fas fa-plus-square"></i>
+            <span class="nav-link-text"> Create Offer | Network</span>
+        </a>
+    </li>
+
+
+</ul>
+<ul class="navbar-nav sidenav-toggler">
+    <li class="nav-item">
+        <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+        </a>
+    </li>
+</ul>

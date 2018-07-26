@@ -1,0 +1,48 @@
+{% load markdownify %}
+<div class="service">
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="card">
+                <img class="card-img-top" src="{{ service.main_image.url }}" alt="{{ service.name }}"
+                     height="250px">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.name }}</h5>
+
+                    <p class="card-text">{{ service.description }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{ service.category.name }}</li>
+                    <li class="list-group-item">{{ service.category.parent.name }}</li>
+
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="card-link">
+                        <i class="fas fa-hand-holding-usd"></i> Price: {{ service.price }}</a>
+                    <a href="#" class="card-link"> <i class="fas fa-truck"></i> Delivered
+                        in {{ service.delivery_time }} {{ service.get_delivery_period_display }}</a>
+                </div>
+            </div> <!--/col-->
+        </div>
+    </div> <!--/row-->
+
+
+    <div class="row">
+        <div class="service-gallery col-md-5">
+            <h4>Gallery</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for image in service.gallery.images.all %}
+            <img src="{{ image.img.url }}" height="100" class="col-2"/>
+        {% endfor %}
+    </div>
+
+
+    <div class="row service-details">
+        <div class="col-md-6">
+            {{ service.details|markdownify }}
+        </div>
+    </div>
+</div>

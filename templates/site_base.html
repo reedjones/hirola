@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %} {% endblock %} | Hirola</title>
+    <meta name="description" content="{% block description %} {% endblock %} | Hirola">
+
+    {% block meta %}{% endblock %}
+
+
+    <!-- Bootstrap core CSS-->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin.css" rel="stylesheet">
+
+    <link href="/static/css/styles.css" rel="stylesheet"/>
+
+    <style>
+
+
+        img#nav-profile-img, #nav-profile-img {
+            width: 50%;
+            align-self: center;
+            height: auto;
+
+        }
+
+        .inset {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6),
+            0 1px 1px rgba(0, 0, 0, 0.1);
+            background-color: transparent !important;
+            z-index: 999;
+        }
+
+        .inset img {
+            border-radius: inherit;
+            width: inherit;
+            height: inherit;
+            display: block;
+            position: relative;
+            z-index: 998;
+        }
+
+        nav#mainNav {
+            padding-right: 4em;
+        }
+
+        #login-target {
+            margin-right: 1em;
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark  {% block body-class %} {% endblock %}" id="page-top">
+
+{% include 'nav.html' %}
+
+<div class="content-wrapper">
+    <div class="container-fluid" id="page-container">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            {% block breadcrumbs %}
+
+            {% endblock %}
+
+        </ol>
+
+        {% block content %}{% endblock %}
+
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    {% include 'footer.html' %}
+</div>
+
+
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/js/sb-admin.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu|Raleway|Nunito" rel="stylesheet">
+
+
+<style>
+    h1, h2, h3, h4, h5 {
+        font-family: 'Nunito', sans-serif;
+
+    }
+
+    header, nav {
+        font-family: 'Raleway', sans-serif;
+    }
+
+    body, .form-control, input {
+        font-family: 'Ubuntu', sans-serif;
+
+    }
+
+    input, .form-control {
+        font-size: 20px;
+    }
+
+    .navbar-sidenav {
+        font-size: 15px !important;
+    }
+</style>
+{% block foot %}{% endblock %}
+
+</body>
+</html>

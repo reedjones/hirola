@@ -1,0 +1,66 @@
+{% extends 'site_base.html' %}
+
+
+{% block body-class %} {% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="list-group list-group-flush small">
+
+            </div>
+        </div>
+    </div>
+
+    {% csrf_token %}
+{% endblock %}
+
+{% include 'user_messages/message_template.html' %}
+
+{% block foot %}
+
+    <script>
+        (function ($) {
+            'use strict';
+            var chat = {
+                isLoading: true,
+                hasNewMessage: false,
+                currentUser: {{ request.user.id }},
+                targetUser: {{ thread.users.1 }},
+                messageCount: 0,
+                cardTemplate: document.querySelector('.cardTemplate'),
+                messages: []
+            };
+            chat.csrf = document.querySelectorAll("[name='csrfmiddlewaretoken']")[0].value;
+
+            document.getElementById('butRefresh').addEventListener('click', function () {
+                // Refresh all of the forecasts
+                chat.loadNewMessages()
+            });
+
+            document.getElementById('butSend').addEventListener('click', function () {
+                // Open/show the add new city dialog
+                chat.sendMessage()
+            });
+
+            chat.loadNewMessages = function () {
+
+            };
+
+            chat.renderMessage = function (message) {
+
+            };
+
+            chat.sendMessage = function () {
+                var url = "{% url "messages-send-message" %}";
+
+            };
+
+            chat.loadNewMessages();
+
+
+        })(jQuery)
+    </script>
+
+{% endblock %}

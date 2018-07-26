@@ -1,0 +1,217 @@
+{% extends 'site_base.html' %}
+
+{% block title %}
+    Add Funds
+{% endblock %}
+
+
+{% block head %}
+    <script src="https://bitpay.com/bitpay.js"></script>
+    <style>
+        #w {
+
+        }
+
+        #payment-methods, #in-btc {
+            font-size: 20px;
+        }
+
+        #cover {
+            opacity: 0.8;
+            background-color: #ccc;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 1000;
+        }
+
+        #cover i {
+            position: relative;
+            left: 45%;
+            top: 35%;
+        }
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h2>Add funds to your <span id="w">Wallet</span> using one of the payment methods below</h2>
+
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="d-flex justify-content-between" id="payment-methods">
+                    <div class="p2"><i class="fab fa-paypal"></i> PayPal</div>
+                    <div class="p2"><i class="far fa-credit-card"></i> Credit Card</div>
+                    <div class="p2"><i class="fab fa-bitcoin"></i> BitCoin</div>
+                </div>
+            </div>
+            <div class="col-md-5 offset-md-2">
+                <div class="card" id="wallet-card">
+
+                    <div class="card-body">
+                        <i class="fas fa-wallet fa-5x"></i> Your Wallet:
+                        <span id="current-balance">{{ wallet.current_balance }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row mt-4 p-2">
+            <form action="https://test.bitpay.com/checkout" method="post"
+                  id="target-form" style="width:100%">
+                <input type="hidden" name="action" value="checkout"/>
+                <input type="hidden" name="currency" value="EUR"/>
+                <div class="form-group col-md-6">
+                    <label for="price">Amount (In EURO) <span id="amount">5</span></label>
+                    <input type="range" min="5" max="50" step="5" value="5" name="price" class="form-control"
+                           id="price"/>
+                </div>
+                <div class="col-md-6 p-2 m-2">
+                    <span>In BTC: </span><span id="in-btc"></span>
+                </div>
+
+                {#                <input type="hidden" name="posData" value=""/>#}
+                {#                #}
+                {#                <input type="hidden" name="data"#}
+                {#                       value="j9xAuln1DREIW7CLE3xMl822Futj6qBY9cM1MpX9x+wgUW1rTHhbOYwdIaDamsK/NaZaicALmlwkKt6w/Vx978J2io79LGU/ptLhYtJIqI8="/>#}
+
+
+                <input type="image" src="https://test.bitpay.com/cdn/en_US/bp-btn-pay-currencies.svg" name="submit"
+                       style="width:210px;" alt="BitPay, the easy way to pay with bitcoins." id="form-sub">
+
+                {#            //<input type="submit" name="" value="Deposit With Bitcoin" class="btn btn-success" id="form-sub"/>#}
+            </form>
+        </div>
+    </div>
+    {% csrf_token %}
+    <div id="cover" style="display:none;"><i class="fas fa-spinner fa-10x fa-spin"></i></div>
+{% endblock %}
+
+{% block foot %}
+
+    <script>
+        function objectifyForm(formArray) {//serialize data function
+
+            var returnArray = {};
+            for (var i = 0; i < formArray.length; i++) {
+                returnArray[formArray[i]['name']] = formArray[i]['value'];
+            }
+            console.log(returnArray)
+            return returnArray;
+        }
+
+        function calculate_exchange(value, rate) {
+            /* get EUR value in BTC */
+            return value / rate
+        }
+
+
+        $(document).ready(function () {
+            var cover = $('#cover');
+            var current_price = 5;
+            var current_rate = undefined;
+            var submit = $('#form-sub');
+            var already_click = false;
+            var invoice_id = undefined;
+
+            var csrf = $("[name='csrfmiddlewaretoken']")[0].value;
+
+            window.addEventListener("message", function (event) {
+                console.log(event)
+                console.log(event.data)
+                if (event.data.status === 'paid') {
+                    console.log(":Payment Confirmed");
+                    $.ajax({
+                        type: 'post',
+                        url: "{{ request.path }}",
+                        data: {
+                            "price": current_price,
+                            'csrfmiddlewaretoken': csrf
+                        },
+                        success: function (data) {
+                            alert("your balance: " + data['balance'])
+                            $('#current-balance').text(data['balance'])
+                        }
+                    })
+                }
+            }, false);
+
+
+            $.ajax({
+                type: 'get',
+                url: "https://bitpay.com/api/rates/BTC/EUR",
+                success: function (data) {
+                    current_rate = data['rate'];
+                    //console.log("rate = " + current_rate)
+                    $('#in-btc').text(calculate_exchange(5, current_rate))
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+            bitpay.onModalWillEnter(function () {
+                console.log('modal is opening');
+                cover.css('display', 'none');
+            });
+
+            bitpay.onModalWillLeave(function () {
+                console.log('modal is closing');
+            });
+
+
+            bitpay.enableTestMode(true);
+
+
+            $('#price').change(function () {
+                $('#amount').text(this.value);
+                current_price = this.value;
+                if (current_rate !== undefined) {
+                    $('#in-btc').text(calculate_exchange(this.value, current_rate))
+                }
+            });
+
+
+            submit.click(function (e) {
+                already_click = true;
+                cover.css('display', '');
+
+                var data = objectifyForm($('#target-form').serializeArray());
+                console.log(data);
+
+
+                console.log(current_price)
+                var url1 = "/wallet/get-bitpay-invoice/";
+                var mdata = {
+                    "price": current_price,
+                    'csrfmiddlewaretoken': csrf
+                };
+
+
+                $.ajax({
+                    type: "POST",
+                    url: url1,
+                    data: mdata,
+                    success: function (res) {
+                        invoice_id = res['id'];
+                        bitpay.showInvoice(invoice_id)
+                    },
+                    error: function (err) {
+                        alert(err)
+                    }
+                });
+
+
+                e.preventDefault();
+            })
+        })
+    </script>
+{% endblock %}

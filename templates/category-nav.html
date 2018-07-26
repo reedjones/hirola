@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-1">
+        <h2 class="mr-2 ml-0 mr-0 mt-0 p-0">Offers
+        </h2>
+    </div>
+    <div class="col-11 d-flex flex-row p-2 justify-content-around">
+        {% for topic in topics %}
+            <div class="dropdown align-self-center">
+                <a href="#" class="align-self-center dropdown-toggle"
+                   role="button" aria-haspopup="true"
+                   aria-expanded="false">{{ topic.name }}</a>
+                <div class="dropdown-menu">
+                    {% for sub in topic.children %}
+                        <a class="dropdown-item" herf="#">{{ sub.name }}</a>
+                    {% endfor %}
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

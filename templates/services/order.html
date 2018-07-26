@@ -1,0 +1,105 @@
+{% extends 'site_base.html' %}
+{% load services_extras %}
+
+{% block title %} Order {{ service.name }} {% endblock %}
+{% block description %} checkout page for {{ service.name }} {% endblock %}
+
+{% block head %}
+    <style>
+        ul {
+            list-style: none;
+        }
+
+        #order-it {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="/">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="/services/">Services</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="#">Service {{ service.name }}</a>
+    </li>
+    <li class="breadcrumb-item active">
+        <a href="#">Order</a>
+    </li>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <img class="card-img-top" src="{{ service.main_image.url }}" alt="{{ service.name }}"
+                         height="150px">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.name }}</h5>
+
+                        <p class="card-text">{{ service.description }}</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="payment card">
+                    <h5 class="card-title">Summary</h5>
+                    <div class="card-body">
+                        <ul class="p-2 border-bottom pb-4">
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div>Subtotal</div>
+                                    <div>{{ service.price }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div>Fee*</div>
+                                    <div>{{ service.get_fee }}</div>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                        <ul class="p-2 mt-4">
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div><strong>Total</strong></div>
+                                    <div><strong>{{ service.get_total }}</strong></div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div>Delivery Time</div>
+                                    <div>{{ service.delivery_time }} {{ service.get_delivery_period_display }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div><!-- card body-->
+
+                    <div class="d-flex p-2 mb-4 align-items-cente justify-content-centerr">
+                        <a href="{% url 'public-service-checkout' target_id=service.id %}" class="btn btn-success m-2" id="order-it"
+                           style="font-size:20px;">Order</a>
+                    </div>
+
+                    <div class="card-footer text-muted">
+                        Here's a message
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block foot %}
+
+{% endblock %}

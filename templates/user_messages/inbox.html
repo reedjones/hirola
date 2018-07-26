@@ -1,0 +1,39 @@
+{% extends 'site_base.html' %}
+
+
+{% block title %} Inbox {% endblock %}
+
+
+{% block head %}
+
+    <style>
+        .mi {
+            height: 50px;
+            width: 50px;
+        }
+
+        .unread {
+            background-color: #d6f5ff52;
+        }
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-10">
+                {% include 'user_messages/thread_list.html' with threads=threads %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block foot %}
+
+{% endblock %}

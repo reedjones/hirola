@@ -1,0 +1,257 @@
+{% extends 'site_base.html' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block description %}
+
+    Complete micro-tasks online with creative people like you!
+{% endblock %}
+
+{% block head %}
+
+    <style>
+
+        h2 {
+            padding-top: 2em;
+
+        }
+
+        .card.col-3 img {
+            height: 150px;
+        }
+
+        .card.col-3 {
+            font-size: smaller;
+        }
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <h1>Welcome Back!</h1>
+            <p>Here's whats new...</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-1">
+            <h2 class="mr-2 ml-0 mr-0 mt-0 p-0">Offers
+            </h2>
+        </div>
+        <div class="col-11 d-flex flex-row p-2 justify-content-around">
+            <ul class="nav nav-fill justify-content-center">
+                {% for topic in topics %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ topic.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row p-1 mt-4 border-top">
+
+        <div class="col-12 card-deck mt-2 pt-2">
+            {% for offer in offers %}
+
+                <div class="card col-3 pl-0 pr-0">
+                    <img class=" rounded card-img-top img-fluid" src="{{ offer.main_image.url }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ offer.name }}</h5>
+
+                        <p class="card-text">{{ offer.description | truncatewords:15 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text muted p-2">
+                            <a href="#"><span class="badge badge-info">{{ offer.category.name }}</span></a>
+                            <a href="#"><span class="badge badge-info"> {{ offer.category.parent.name }}</span></a>
+                        </p>
+                    </div>
+                </div>
+
+            {% endfor %}
+            {% for offer in offers %}
+
+                <div class="card col-3 pl-0 pr-0">
+                    <img class=" rounded card-img-top img-fluid" src="{{ offer.main_image.url }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ offer.name }}</h5>
+
+                        <p class="card-text">{{ offer.description | truncatewords:15 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text muted p-2">
+                            <a href="#"><span class="badge badge-info">{{ offer.category.name }}</span></a>
+                            <a href="#"><span class="badge badge-info"> {{ offer.category.parent.name }}</span></a>
+                        </p>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    </div>
+    <div class="row mt-4 mb-4 border-bottom">
+        <div class="col-1">
+            <h2 class="mr-2 ml-0 mr-0 mt-0 p-0">Requests
+            </h2>
+        </div>
+        <div class="col-11 d-flex flex-row p-2 justify-content-around">
+            <ul class="nav nav-fill justify-content-center">
+                {% for topic in topics %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ topic.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col-12 card-deck">
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col-12 card-deck">
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="card col-3 pl-0 pr-0">
+                <img class=" rounded card-img-top img-fluid" src="http://via.placeholder.com/280x150"/>
+                <div class="card-body">
+                    <h5 class="card-title">Request Title</h5>
+
+                    <p class="card-text">{% lorem 15 w random %}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text muted p-2">
+                        <a href="#"><span class="badge badge-info">Art</span></a>
+                        <a href="#"><span class="badge badge-info"> Creative Coding</span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <h2>Canvas| Community</h2>
+        </div>
+
+    </div>
+    <div class='row mb-4 pb-2 mt-2'>
+
+    </div>
+
+
+{% endblock %}
+{% block foot %}
+
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+{% endblock %}

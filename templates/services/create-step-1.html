@@ -1,0 +1,123 @@
+{% extends 'site_base.html' %}
+
+{% block title %} Step 1 {% endblock %}
+
+{% block head %}
+
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h3>Name, Description, and Category</h3>
+            <div class="stepwizard">
+                <div class="stepwizard-row">
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-primary btn-circle">1</button>
+                        <p>Step 1</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">2</button>
+                        <p>Step 2</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">3</button>
+                        <p>Step 3</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">3</button>
+                        <p>Publish</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mx-auto mt-5">
+                    <div class="card-header">Step 1</div>
+                    <div class="card-body">
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            {% include 'form.html' with form=form %}
+
+                            <div class="form-group">
+                                <label for="cat-1">Category</label>
+                                <select multiple class="form-control" id="cat-1">
+                                    {% for item in ptopics %}
+                                        <option value="{{ item.id }}">{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cat-2">Sub Category (Pick the closest)</label>
+                                <select multiple class="form-control" id="cat-2">
+
+                                </select>
+                            </div>
+
+
+                            <input type="submit" class="btn btn-primary" value="Submit" id="form-submit"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block foot %}
+
+    <script>
+        var cat_target = document.getElementById("id_category");
+        var sub_cat_holder = document.getElementById('cat-2');
+
+        {#// var topics = jQuery.parseJSON({{ topics | safe }});#}
+        var topics = {{ topics | safe }};
+
+        console.log(topics);
+
+        console.log(cat_target);
+
+        window.onload = function () {
+            document.getElementById("cat-1").onchange = function () {
+                $(sub_cat_holder).empty();
+                var val = this.value;
+                console.log(val);
+
+                var subs = get_sub_categories(val);
+                console.log(subs);
+
+                for (var i = 0; i < subs.length; i++) {
+                    $('<option/>', {
+                        value: subs[i]['id'],
+                        text: subs[i]['name']
+                    }).appendTo(sub_cat_holder);
+                }
+            };
+        };
+
+        function get_sub_categories(item) {
+            console.log("processing " + item);
+
+            for (var i = 0; i < topics.length; i++) {
+                if (topics[i]['id'] == item) {
+                    console.log("found " + topics[i]['name']);
+                    return topics[i]['children']
+                }
+            }
+        }
+
+        $('#form-submit').click(function (e) {
+            cat_target.value = sub_cat_holder.value;
+            //e.preventDefault();
+        })
+    </script>
+
+{% endblock %}

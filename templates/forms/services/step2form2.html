@@ -1,0 +1,63 @@
+{% load widget_tweaks %}
+
+{% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+{% endfor %}
+
+{% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+            {{ error }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% for field in form.visible_fields %}
+    {% if field.auto_id == "id_price" %}
+        <div class="form-group" id="idp">
+            <label for="id_price">
+                Price in Euro == <span id="btc-price"></span>
+            </label>
+        </div>
+    {% endif %}
+    <div class="{% if field.auto_id == "id_price" %} input-group"> {% else %} form-group "> {% endif %}
+
+    {% if not field.auto_id == 'id_price' %}
+        {{ field.label_tag }}
+    {% endif %}
+
+    {% if form.is_bound %}
+        {% if field.errors %}
+            {% render_field field class="form-control is-invalid" %}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% else %}
+            {% render_field field class="form-control is-valid" %}
+        {% endif %}
+    {% else %}
+        {% render_field field class="form-control" %}
+    {% endif %}
+
+    {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+    {% if field.auto_id == 'id_price' %}
+        {% for group in groups %}
+            {% if group.id == field.auto_id %}
+                <div class="input-group-append">
+                    {% for item in group.items %}
+                        <span class="input-group-text"
+                              {% if item.give_id %}id="{{ item.give_id }}" {% endif %}>
+                            {{ item.value }}
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+    </div>
+{% endfor %}

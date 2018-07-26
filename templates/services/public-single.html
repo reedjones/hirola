@@ -1,0 +1,139 @@
+{% extends 'site_base.html' %}
+{% load services_extras %}
+
+{% block title %} {{ service.name }} {% endblock %}
+{% block description %} service {{ service.name }} {% endblock %}
+
+{% block head %}
+    <style>
+        #h11, #space-me {
+            margin-bottom: 1em;
+        }
+
+        #service-offered-by-image {
+            height: 2.5em;
+        }
+
+        #service-tools-top .btn-group {
+            margin-right: 1.5em;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+
+    <li class="breadcrumb-item">
+        <a href="/services/">Services</a>
+    </li>
+    <li class="breadcrumb-item active">
+        <a href="#">Service {{ service.name }}</a>
+    </li>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h4 class="display-4" id="h11">{{ service.name }}</h4>
+        <div class="row" id="space-me">
+            <div class="col-12">
+                <!--d-flex justify-content-between-->
+                <div class="btn-toolbar"
+                     role="toolbar" aria-label="Toolbar with button groups"
+                     id="service-tools-top">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="First group">
+                        <button type="button" class="btn btn-secondary" id="bookmark-it">
+                            <i class="fas fa-bookmark"></i> Bookmark
+                        </button>
+
+
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Second group">
+                        <img src="{{ profile.photo.url }}" height="80px" class="img"
+                             id="service-offered-by-image"/>
+                        <button type="button" class="btn btn-sm">
+                            By: {{ profile.nick }}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Third group">
+                        <button type="button" class="btn btn-danger"
+                                id="report-it"><i class="fas fa-flag"></i> Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% include 'services/service-card-1.html' with service=service %}
+
+        <div class="row">
+            <a class="btn btn-success btn-lg" href="{{ request.path }}order/">Order</a>
+        </div>
+
+    </div>
+    {% csrf_token %}
+
+{% endblock %}
+
+{% block foot %}
+
+
+    <script>
+        $(document).ready(function () {
+            var url = '/services/is-bookmarked/{{ service.id }}/';
+            var is_marked = false;
+            var bookmark = $('#bookmark-it');
+            var csrf = $("[name='csrfmiddlewaretoken']")[0].value;
+
+            $.ajax({
+                type: "get",
+                url: url,
+                success: function (msg) {
+                    if (msg['msg'] == 1) {
+                        bookmark.addClass('bg-success');
+                        is_marked = true;
+                    }
+                },
+                error: function (errorThrown) {
+                    alert("error \n" + errorThrown);
+                }
+            });
+
+            if (!is_marked) {
+                console.log(csrf);
+                bookmark.click(function () {
+                    {% if user.is_authenticated %}
+                        var data = {
+                            'csrfmiddlewaretoken': csrf,
+                            'value': {{ service.id }}
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ request.path }}",
+                            data: data,
+                            success: function (msg) {
+                                //alert("Data Saved: " + msg);
+                                //alert(msg['message'])
+
+                                if (msg['message'] == 'saved') {
+                                    bookmark.addClass('bg-success')
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert("some error" + "\n" + textStatus + "\n" + errorThrown);
+                            }
+                        });
+                    {% else %}
+                        alert("You have to login");
+                    {% endif %}
+                });
+            }
+
+
+        })
+
+    </script>
+
+
+{% endblock %}

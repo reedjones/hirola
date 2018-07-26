@@ -1,0 +1,21 @@
+{% load user_message_tags %}
+<div class="list-group list-group-flush small">
+    {% for thread in threads %}
+        <a class="list-group-item list-group-item-action {% if thread|unread:user %}unread{% endif %}"
+           href="{{ thread.get_absolute_url }}">
+            <div class="media">
+                <img class="d-flex mr-3 rounded-circle mi" src="{{ thread|get_thumbnail_for:request.user }}" alt="">
+                <div class="media-body">
+
+                    <h5 class="mt-0 mb-1">Thread with: <strong>{{ thread|get_other_user_nick:request.user }}</strong>
+                    </h5>
+                    {{ thread.subject }}
+
+                    <div class="text-muted smaller">Last Message {{ thread.latest_message.sent_at }}</div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+
+    <a class="list-group-item list-group-item-action" href="#">Here's an Action</a>
+</div>

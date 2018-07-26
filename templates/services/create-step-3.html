@@ -1,0 +1,175 @@
+{% extends 'site_base.html' %}
+
+{% block title %} Step 3 {% endblock %}
+
+{% block head %}
+
+    <style>
+        #val-target {
+            position: absolute;
+            bottom: 0;
+            font-size: 1.2em;
+        }
+
+        #form-submit {
+            margin-top: 1em;
+        }
+
+        .gallery {
+            margin-top: 100px;
+        }
+
+        .gallery-item {
+            margin-bottom: 30px;
+        }
+
+        .modal-footer {
+            text-align: center;
+        }
+
+        .pagination {
+            margin: 0;
+        }
+
+        #preview {
+            outline: gray solid 1px;
+            border-radius: 104px;
+            box-shadow: black;
+            padding: 0.5em;
+            min-height: 100px;
+        }
+
+        .invalid-feedback {
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h3 class="display-4">Main Image And Gallery <i class="far fa-images"></i></h3>
+            <div class="stepwizard">
+                <div class="stepwizard-row">
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle">1</button>
+                        <p>Step 1</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle">2</button>
+                        <p>Step 2</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-primary btn-circle">3</button>
+                        <p>Step 3</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">3</button>
+                        <p>Publish</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row main-image" id="main-image">
+            <h3>Main image</h3>
+
+        </div>
+
+        <div class="gallery row" id="preview">
+            <h3>Gallery for {{ service.name }}</h3>
+
+        </div>
+{#        <div class="row error was-validated">#}
+{#            {% include 'forms/errors.html' with form=form %}#}
+{#        </div>#}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mx-auto mt-5">
+                    <div class="card-header">Step 3</div>
+                    <div class="card-body">
+
+                        <form method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+{#                            <div class="form-group">#}
+{#                                <label for="id_main_image">Main Image</label>#}
+{#                                <input type="file" id="id_main_image" class="form-control"/>#}
+{#                            </div>#}
+{#                            <div class="form-group">#}
+{#                                <label for="id_gallery">Add Photos to Gallery (select multiple)</label>#}
+{##}
+{#                                <input type="file" multiple id="id_gallery" class="form-control">#}
+{#                            </div>#}
+                            {% include 'form.html' with form=form %}
+
+                            <input type="submit" class="btn btn-primary" value="Submit" id="form-submit"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'services/step-3-modal.html' %}
+{% endblock %}
+
+{% block foot %}
+    <script>
+
+
+        function previewImages() {
+
+            var $preview = $('#preview').empty();
+            if (this.files) $.each(this.files, readAndPreview);
+
+            function readAndPreview(i, file) {
+
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                    return alert(file.name + " is not an image");
+                } // else...
+
+                var reader = new FileReader();
+
+                $(reader).on("load", function () {
+                    $preview.append($("<img/>", {src: this.result, height: 100, class: "col-md-2 removethis"}));
+                });
+
+                reader.readAsDataURL(file);
+
+            }
+
+        }
+
+        $('#id_gallery').on("change", previewImages);
+
+        function previewSingle() {
+            var $preview = $('#main-image').empty();
+
+            var file = document.getElementById('id_main_image').files[0];
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                $preview.append($("<img/>", {src: reader.result, height: 150}))
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        window.onload = function () {
+            document.getElementById("id_main_image").onchange = function () {
+                previewSingle();
+            };
+        };
+
+        $(document).on('click', ".deletebutton", function () {
+            $(this).closest(".removethis").remove();
+        });
+    </script>
+
+
+
+
+{% endblock %}

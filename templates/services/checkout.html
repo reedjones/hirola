@@ -1,0 +1,328 @@
+{% extends 'site_base.html' %}
+{% load services_extras %}
+
+{% block title %} Order {{ service.name }} {% endblock %}
+{% block description %} checkout page for {{ service.name }} {% endblock %}
+
+{% block head %}
+    <style>
+        ul {
+            list-style: none;
+        }
+
+        #order-it {
+            width: 100%;
+        }
+
+        .payment-options a, .payment-options a:hover {
+            color: black;
+        }
+
+        #cover {
+            opacity: 0.8;
+            background-color: #ccc;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 1000;
+        }
+
+        .btn-success {
+            color: white;
+        }
+
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="/">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="/services/">Services</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="#">Service {{ service.name }}</a>
+    </li>
+    <li class="breadcrumb-item active">
+        <a href="#">Order</a>
+    </li>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card payment-options">
+                    <div class="card-header">
+                        <h3 class="card-title">Payment Options</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li class="p-2 mb-2 border-bottom">
+                                <a data-toggle="collapse"
+                                   href="#cardCollapse"
+                                   role="button" aria-expanded="false" aria-controls="collapseExample" id="forcard">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <img class="img-fluid" src="/static/images/credit-cards.png"
+                                             height="30px;">
+
+                                        <div>
+                                            <p>Credit Card</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="p-2 mt-2 border-bottom">
+                                <a data-toggle="collapse"
+                                   href="#payPalCollapse"
+                                   role="button" aria-expanded="false" aria-controls="collapseExample" id="forpaypal">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <i class="fab fa-paypal fa-4x"
+                                           style="color:lightblue;"></i>
+                                        <h4>Paypal</h4>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="p-2 mt-2 border-bottom">
+                                <a data-toggle="collapse"
+                                   href="#bitPayCollapse"
+                                   role="button" aria-expanded="false" aria-controls="collapseExample" id="forbitpay">
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <img src="https://test.bitpay.com/cdn/en_US/bp-btn-pay-currencies.svg"
+                                             name="submit"
+                                             style="width:210px;" alt="BitPay, the easy way to pay with bitcoins."
+                                             id="form-sub"/>
+                                        <h4>BitPay</h4>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="p-2 mt-2 border-bottom">
+                                <a data-toggle="collapse"
+                                   href="#walletCollapse"
+                                   role="button" aria-expanded="false" aria-controls="collapseExample" id="forwallet">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <i class="fas fa-wallet fa-4x"></i>
+                                        <h4>Your Wallet</h4>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <div id="cardCollapse" class="collapse">
+                            card
+                        </div>
+                        <div id="payPalCollapse" class="collapse">
+                            paypal
+                        </div>
+                        <div id="bitPayCollapse" class="collapse">
+                            <a href="#" class="btn btn-lg btn-success"
+                               id="bp-target">Pay with BitPay</a>
+                        </div>
+                        <div id="walletCollapse" class="collapse">
+                            <p class="p-2 m-2">
+                                <strong>Your Balance: </strong>{{ wallet.current_balance }} €
+                            </p>
+                            <br>
+                            {% if wallet.current_balance < service.get_total %}
+                                <a href="#" id="wallet-target"
+                                   class="btn btn-lg btn-success" disabled>Pay with Wallet</a>
+
+                                You need to add more funds to wallet
+                            {% else %}
+                                <button id="wallet-target" class="btn btn-lg btn-success">Pay with your Wallet</button>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="summary card">
+                    <div class="card-header">
+                        <h5 class="card-title">Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-6">
+                            <img src="{{ service.main_image.url }}" height="50px" alt="image"/>
+                        </div>
+                        <div class="col-md-6">{{ service.description | truncatewords:12 }}</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="p-2 border-bottom pb-4">
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div>Subtotal</div>
+                                    <div>{{ service.price }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div>Fee*</div>
+                                    <div>{{ service.get_fee }}</div>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                        <ul class="p-2 mt-4">
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div><strong>Total</strong></div>
+                                    <div><strong>{{ service.get_total }}</strong></div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex justify-content-between">
+                                    <div>Delivery Time</div>
+                                    <div>{{ service.delivery_time }} {{ service.get_delivery_period_display }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div><!-- card body-->
+
+                    <div class="d-flex p-2 mb-4 align-items-cente justify-content-centerr">
+                        <a href=""
+                           class="btn btn-success m-2" id="order-it"
+                           style="font-size:20px;">Order</a>
+                    </div>
+
+                    <div class="card-footer text-muted">
+                        Here's a message
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="" method="post" id="success-submit">
+        {% csrf_token %}
+        <input type="hidden" name="price" value="{{ service.get_total }}"/>
+        <input type="hidden" name="paid" value="1"/>
+        <input type="hidden" name="platform" value="" id="platform-target"/>
+    </form>
+    <div id="cover" style="display:none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 md-offset-4">
+                    <i class="fas fa-spinner fa-10x fa-spin"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block foot %}
+    <script src="https://bitpay.com/bitpay.js"></script>
+    <script>
+        function objectifyForm(formArray) {//serialize data function
+
+            var returnArray = {};
+            for (var i = 0; i < formArray.length; i++) {
+                returnArray[formArray[i]['name']] = formArray[i]['value'];
+            }
+            console.log(returnArray)
+            return returnArray;
+        }
+
+        $(document).ready(function () {
+            var forcard, forpaypal, forbitpay, csrf, bpbutton, forwallet;
+            var cover = $('#cover');
+            var invoice_id = undefined;
+            var invoice_url = "/wallet/get-bitpay-invoice/";
+            var price = {{ service.get_total }};
+            var wbutton = $('#wallet-target');
+
+            //console.log(price);
+
+            bpbutton = $('#bptarget');
+
+            csrf = $("[name='csrfmiddlewaretoken']")[0].value;
+            var idata = {
+                "price": price,
+                'csrfmiddlewaretoken': csrf
+            };
+
+            bitpay.enableTestMode(true);
+            bitpay.onModalWillEnter(function () {
+                console.log('modal is opening');
+                cover.css('display', 'none');
+            });
+
+            bitpay.onModalWillLeave(function () {
+                console.log('modal is closing');
+            });
+
+            window.addEventListener("message", function (event) {
+                console.log(event);
+                console.log(event.data);
+                if (event.data.status === 'paid') {
+                    console.log(":Payment Confirmed");
+                    $('#success-submit').submit();
+                }
+            }, false);
+
+            bpbutton.click(function () {
+                $('#platform-target').val("bitpay");
+
+                cover.css('display', '');
+                console.log("[*} Fetching invoice");
+                $.ajax({
+                    type: "POST",
+                    url: invoice_url,
+                    data: idata,
+                    success: function (res) {
+                        invoice_id = res['id'];
+                        bitpay.showInvoice(invoice_id)
+                    },
+                    error: function (err) {
+                        alert(err)
+                    }
+                });
+            });
+
+            wbutton.click(function () {
+                console.log("clicked")
+                $('#platform-target').val("wallet");
+                $('#success-submit').submit();
+            });
+
+
+            forcard = $('#cardCollapse');
+            forbitpay = $('#bitPayCollapse');
+            forpaypal = $('#payPalCollapse');
+            forwallet = $('#walletCollapse');
+
+
+            forcard.on('show.bs.collapse', function () {
+
+                forpaypal.collapse('hide');
+                forbitpay.collapse('hide');
+                forwallet.collapse('hide');
+            });
+
+            forpaypal.on('show.bs.collapse', function () {
+                forbitpay.collapse('hide');
+                forcard.collapse('hide');
+                forwallet.collapse('hide');
+            });
+
+            forbitpay.on('show.bs.collapse', function () {
+                forpaypal.collapse('hide');
+                forcard.collapse('hide');
+                forwallet.collapse('hide');
+            });
+
+            forwallet.on('show.bs.collapse', function () {
+                forbitpay.collapse('hide');
+                forcard.collapse('hide');
+                forpaypal.collapse('hide');
+            })
+        })
+    </script>
+
+{% endblock %}

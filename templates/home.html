@@ -1,0 +1,213 @@
+{% extends 'site_base.html' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block description %}
+
+    Complete micro-tasks online with creative people like you!
+{% endblock %}
+
+{% block head %}
+
+    <style>
+        .offer {
+            max-width: 200px;
+        }
+
+        .request-card {
+
+        }
+
+        h2 {
+            padding-top: 2em;
+
+        }
+
+        .post-content {
+            margin-top: 10px;
+        }
+
+        .PostTitle {
+            padding: 5px;
+        }
+
+        .PostDate {
+            float: right;
+            font-size: 14px;
+            margin-top: -26px;
+            margin-right: 10px;
+        }
+
+        .offer-image {
+            width: 260px;
+            height: 180px;
+        }
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <h1>Welcome Back!</h1>
+            <p>Here's whats new...</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h2>Offers</h2>
+        </div>
+    </div>
+    <div class="row" style="padding: 1em;">
+
+        {% for offer in offers %}
+            <div class="col-sm-6 post-content border">
+                <div class="row">
+                    <div class="col PostTitle">
+                        <h4><a href="#">{{ offer.name }}</a></h4>
+                        <div class="PostDate">
+                            <i class="fa fa-calendar"></i>
+                            {{ offer.created_at.day }}, {{ offer.created_at.month }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 border-right">
+                        <a href="#" class="thumbnail">
+                            <img src="{{ offer.main_image.url }}" alt="" class="offer-image">
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <p>
+                            {{ offer.description | truncatewords:15 }}
+                        </p>
+                        <p><a class="btn btn-sm btn-success" href="#">More</a></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col small p-2 pl-2 ml-2">
+                        <p>
+                            <i class="fa fa-user-circle"></i> by <a href="#">{{ offer.offered_by.profile.nick }}</a>
+                            | <i class="fa fa-comment"></i> <a href="#">3 Comments</a>
+                            | <i class="fa fa-heart"></i> <a href="#">39 Saves</a>
+                            | <i class="fa fa-tags"></i> Tags :
+
+                            <a href="#"><span class="badge badge-info">{{ offer.category.name }}</span></a>
+                            <a href="#"><span class="badge badge-info">{{ offer.category.parent.name }}</span></a>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h2>Requests</h2>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 post-content">
+            <div class="row">
+                <div class="col PostTitle">
+                    <h4><a href="#">Title of the post</a></h4>
+                    <div class="PostDate"><i class="fa fa-calendar"></i> Sept 8, 2017</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="#" class="thumbnail">
+                        <img src="http://placehold.it/260x180" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <p>
+                        Una descripción breve para decirle al usuario que es lo que contiene el post!
+                    </p>
+                    <p><a class="btn btn-sm btn-success" href="#">Leer más</a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-center small p-2">
+                    <p>
+                        <i class="fa fa-user-circle"></i> by <a href="#">Miguel92</a>
+                        | <i class="fa fa-comment"></i> <a href="#">3 Comments</a>
+                        | <i class="fa fa-share"></i> <a href="#">39 Shares</a>
+                        | <i class="fa fa-tags"></i> Tags : <a href="#"><span class="badge badge-info">Snipp</span></a>
+                        <a href="#"><span class="badge badge-info">Bootstrap</span></a>
+                        <a href="#"><span class="badge badge-info">UI</span></a>
+                        <a href="#"><span class="badge badge-info">growth</span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 post-content">
+            <div class="row">
+                <div class="col PostTitle">
+                    <h4><a href="#">Title of the post</a></h4>
+                    <div class="PostDate"><i class="fa fa-calendar"></i> Sept 8, 2017</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="#" class="thumbnail">
+                        <img src="http://placehold.it/260x180" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <p>
+                        Una descripción breve para decirle al usuario que es lo que contiene el post!
+                    </p>
+                    <p><a class="btn btn-sm btn-success" href="#">Leer más</a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-center small p-2">
+                    <p>
+                        <i class="fa fa-user-circle"></i> by <a href="#">Miguel92</a>
+                        | <i class="fa fa-comment"></i> <a href="#">3 Comments</a>
+                        | <i class="fa fa-share"></i> <a href="#">39 Shares</a>
+                        | <i class="fa fa-tags"></i> Tags : <a href="#"><span class="badge badge-info">Snipp</span></a>
+                        <a href="#"><span class="badge badge-info">Bootstrap</span></a>
+                        <a href="#"><span class="badge badge-info">UI</span></a>
+                        <a href="#"><span class="badge badge-info">growth</span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h2>Canvas| Community</h2>
+        </div>
+
+    </div>
+    <div class='row'>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h2> New Posts | Community </h2>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+{% block foot %}
+
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+{% endblock %}

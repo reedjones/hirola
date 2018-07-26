@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+{% block extrahead %}
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #h11, #space-me {
+            margin-bottom: 1em;
+        }
+    </style>
+{% endblock %}
+
+{% block content_title %} Title {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h4 class="display-4" id="h11">Service ID : {{ service.id }}</h4>
+        <div class="row" id="space-me">
+            <div class="col-12">
+                {{ service.name }}
+            </div>
+        </div>
+
+        {% include 'services/service-card-1.html' with service=service %}
+
+        <div class="row">
+            <form action="" method="post" id='approve'>
+                {% csrf_token %}
+                <input type="submit" class="btn btn-primary" value="approve" id="form-approve" name="approve"/>
+            </form>
+        </div>
+        <div class="row">
+            <form action="" method="post" id="deny">
+                {% csrf_token %}
+                {% include 'form.html' with form=deny_form %}
+
+                <input type="submit" value="deny" class="btn btn-danger" id="form-deny" name="deny"/>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block footer %}
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

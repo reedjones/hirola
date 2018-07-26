@@ -1,0 +1,198 @@
+{% extends 'site_base.html' %}
+
+{% block title %} Step 2 {% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/static/vendor/bootstrap-slider.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <style>
+        #val-target {
+            position: absolute;
+            bottom: 0;
+            font-size: 1.2em;
+        }
+
+        #form-submit {
+            margin-top: 1em;
+        }
+
+        label[for*="id_price"] {
+            margin-right: 1.5em;
+        }
+
+        #idp {
+            margin-bottom: .17rem;
+        }
+
+        #dtr {
+            margin-top: 1em;
+        }
+    </style>
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h3>Details, Price, and Time</h3>
+            <div class="stepwizard">
+                <div class="stepwizard-row">
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle">1</button>
+                        <p>Step 1</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-primary btn-circle">2</button>
+                        <p>Step 2</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">3</button>
+                        <p>Step 3</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">3</button>
+                        <p>Publish</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mx-auto mt-5">
+                    <div class="card-header">Step 2</div>
+                    <div class="card-body">
+                        <p>Use the <i class="fas fa-eye"></i> Icon to Preview your Post</p>
+                        <form method="post" class="needs-validation" action="" novalidate>
+                            {% csrf_token %}
+                            {% include 'forms/services/step2form2.html' with form=form form_group=form_group groups=groups %}
+
+                            <div class="form-group row" id="dtr">
+                                <div class="col-8">
+                                    <label for="range">Delivery Time (Max 24 days)</label>
+                                    <input id="range" type="text" data-slider-min="1" data-slider-max="24"
+                                           data-slider-step="1" data-slider-value="3"/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="badge badge-info" id="val-target">3 hours</span>
+                                </div>
+
+                            </div>
+                            <input type="hidden" value="{{ target_id }}" id="target-id"/>
+                            <input type="submit" class="btn btn-primary" value="Submit" id="form-submit"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block foot %}
+    <script src="/static/vendor/bootstrap-slider.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>#}
+    <script>
+        var delivery_time_target = document.getElementById("id_delivery_time");
+        var dp = document.getElementById('id_delivery_period');
+
+        var current_p = "hours";
+        var current_sv = 3;
+
+        $("[name='details']").removeAttr('required');
+
+        dp.onchange = function () {
+            console.log(this.value);
+            current_p = get_period(this.value);
+            console.log(current_p);
+            range_value_target.text(current_sv + " " + current_p);
+        };
+
+        //$('#id_target_id').value = $('#target-id').val();
+        var tid = document.getElementById('target-id').value;
+        document.getElementById('id_target_id').value = tid;
+
+
+        var range_target = $('#range');
+
+        var range_value_target = $('#val-target');
+        range_target.slider();
+        range_target.on("slide", function (slideEvt) {
+            range_value_target.text(slideEvt.value + " " + current_p);
+            current_sv = slideEvt.value;
+            delivery_time_target.value = slideEvt.value;
+        });
+
+        var simplemde = new SimpleMDE({
+            element: document.getElementById("id_details"),
+            toolbar: ["bold", "italic", "heading", "|", "quote", "|", 'preview', "|", "fullscreen"]
+        });
+
+        function get_period(val) {
+            if (val === 'h') {
+                return "hours"
+            }
+            else if (val === 'd') {
+                return "days"
+            }
+            else {
+                console.error("what the fuck just happened")
+            }
+        }
+
+        /*var current_price_holder = document.getElementById('id_current_price');
+        var price_holder = document.getElementById('id_price');
+        $(price_holder).slider();
+        price_holder.on("slide", function(e){
+            current_price_holder.text(e.value);
+        })*/
+        var current_price_holder = document.getElementById('id_current_price');
+        var price_holder = document.getElementById('id_price');
+
+        /*
+
+        price_holder.onchange = function () {
+            console.log("changed")
+            current_price_holder.innerHTML = this.value;
+            console.log(current_price_holder)
+            console.log(current_price_holder.text)
+            console.log(this.value)
+
+        }
+
+        */
+
+        $(price_holder).keyup(function (e) {
+            $(current_price_holder).html($(this).val());
+        }).keypress(function (e) {
+            return /[a-z0-9.-]/i.test(String.fromCharCode(e.which));
+        });
+
+
+        $(document).ready(function () {
+
+        })
+
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+
+    </script>
+
+{% endblock %}

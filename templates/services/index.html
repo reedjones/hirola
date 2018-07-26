@@ -1,0 +1,89 @@
+{% extends 'site_base.html' %}
+{% load services_extras %}
+
+{% block title %} Service Offers {% endblock %}
+{% block description %} Service Offers {% endblock %}
+
+{% block head %}
+    <style>
+        #h11 {
+            margin-bottom: 1em;
+        }
+
+        a.custom-card,
+        a.custom-card:hover {
+            color: inherit;
+        }
+    
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="/">Home</a>
+    </li>
+    <li class="breadcrumb-item active">
+        <a href="#">Services</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h4 class="display-4" id="h11">Dislpay 4 Header</h4>
+        <div class="row">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if services.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+
+                                <a href="?page=1">&laquo; First</a>
+                                <a href="?page={{ services.previous_page_number }}">Previous</a>
+
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ services.number }} of {{ services.paginator.num_pages }}
+                        </a>
+                    </li>
+                    {% if services.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page{{ services.next_page_number }}">Next</a>
+                        </li>
+                        <li>
+                            <a href="?page={{ services.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </div>
+        <div class="row">
+            {% for service in services %}
+                <div class="col-4">
+                    <a class="custom-card" href="{{ service.get_public_url }}">
+                        <div class="card">
+                            <img class="card-img-top" src="{{ service.main_image.url }}" alt="Card image cap"
+                                 height="200px">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ service.name }}</h5>
+                                <p class="card-text">{{ service.description }}</p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        {{ service.category.name }}
+                                        | {{ service.category.parent.name }}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

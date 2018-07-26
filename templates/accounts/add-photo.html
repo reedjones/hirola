@@ -1,0 +1,64 @@
+{% extends 'site_base.html' %}
+
+{% block title %} Add a Photo {% endblock %}
+
+{% block head %}
+
+    <style>
+        #img-target {
+            width: 50%;
+            align-self: center;
+            height: auto;
+            padding-top: 1em;
+        }
+    </style>
+
+{% endblock %}
+
+{% block body-class %} sidenav-toggled {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="card card-login mx-auto mt-5">
+            <div class="card-header">Add a Photo</div>
+
+            <img class="card-img-top rounded-circle"
+                 src="/static/images/wireframe/image.png" alt="your photo" id="img-target">
+
+            <div class="card-body">
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% include 'form.html' with form=form %}
+
+                    <input type="submit" class="btn btn-primary" value="Submit"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block foot %}
+
+    <script>
+        window.onload = function () {
+            document.getElementById("id_image").onchange = function () {
+                previewFile();
+            };
+        };
+
+        function previewFile() {
+            var preview = document.getElementById("img-target");
+            var file = document.querySelector('input[type=file]').files[0];
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+{% endblock %}

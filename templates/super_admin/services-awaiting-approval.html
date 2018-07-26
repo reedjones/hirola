@@ -1,0 +1,87 @@
+{% extends 'admin/base.html' %}
+
+{% block extrahead %}
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        a.custom-card,
+        a.custom-card:hover {
+            color: inherit;
+        }
+    </style>
+{% endblock %}
+
+{% block content_title %} Title {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            {% if services.has_previous %}
+                                <a href="?page=1">&laquo; First</a>
+                                <a href="?page={{ services.previous_page_number }}">Previous</a>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            Page {{ services.number }} of {{ services.paginator.num_pages }}
+                        </a>
+                    </li>
+                    {% if services.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page{{ services.next_page_number }}">Next</a>
+                        </li>
+                        <li>
+                            <a href="?page={{ services.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </div>
+
+        <div class="row">
+
+            {% for service in services %}
+                <div class="col-4">
+                    <a href="/super-admin/service-approve/{{ service.id }}/" class="custom-card">
+                        <div class="card">
+                            <img class="card-img-top" src="{{ service.main_image.url }}" alt="Card image cap"
+                                 height="200px">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ service.name }}</h5>
+                                <p class="card-text">{{ service.description }}</p>
+                                <p class="card-text">By: {{ service.offered_by.name }}</p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        {{ service.category.name }}
+                                        | {{ service.category.parent.name }}
+                                    </small>
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <p class="card-text">On: {{ service.created_at }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    Sidebar
+{% endblock %}
+
+
+{% block footer %}
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

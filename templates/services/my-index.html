@@ -1,0 +1,43 @@
+{% extends 'site_base.html' %}
+{% load services_extras %}
+
+{% block title %} My Services {% endblock %}
+{% block description %} your service list {% endblock %}
+
+{% block head %}
+    <style>
+        #h11 {
+            margin-bottom: 1em;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active}">
+        <a href="#">Your Offers</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h4 class="display-4" id="h11">Your Offers</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="list-group">
+                    {% for service in services %}
+                        <a href="{{ service.3 | get_my_url }}"
+                           class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ service.0 }}</h5>
+                                <small>{{ service.1 }}</small>
+                            </div>
+                            <small><strong>Status: </strong>{{ service.2 | get_status }}</small>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
